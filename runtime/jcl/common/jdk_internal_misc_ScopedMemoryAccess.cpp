@@ -52,10 +52,16 @@ closeScope0OSlotWalkFunction(J9VMThread *vmThread, J9StackWalkState *walkState, 
 	J9Method *method = walkState->method;
 	if (NULL != method) {
 		J9ROMMethod *romMethod = J9_ROM_METHOD_FROM_RAM_METHOD(method);
+		printf("Method: %s\n", (char*)J9UTF8_DATA(J9ROMMETHOD_NAME(romMethod)));
 		if (NULL != romMethod && J9ROMMETHOD_HAS_EXTENDED_MODIFIERS(romMethod)) {
 			U_32 extraModifiers = getExtendedModifiersDataFromROMMethod(romMethod);
+			printf("Modifiers: %x\n", extraModifiers);
 			if (J9ROMMETHOD_HAS_SCOPED_ANNOTATION(extraModifiers)) {
+				printf("Scoped Annotation\n");
+				J9Class * slotClass = J9OBJECT_CLAZZ(vmThread, *slot);
+				printf("Slot class: %s\n", (char*)J9UTF8_DATA(J9ROMCLASS_CLASSNAME(slotClass->romClass)));
 				if (*slot == J9_JNI_UNWRAP_REFERENCE(walkState->userData1)) {
+					printf("Found\n");
 					*(jboolean *)walkState->userData2 = JNI_FALSE;
 				}
 			}
