@@ -39,6 +39,7 @@ Java_jdk_internal_misc_ScopedMemoryAccess_registerNatives(JNIEnv *env, jclass cl
 static UDATA
 closeScope0FrameWalkFunction(J9VMThread *vmThread, J9StackWalkState *walkState)
 {
+	printf("	Next frame\n");
 	if (JNI_FALSE == *(jboolean *)walkState->userData2) {
 		/* scope has been found */
 		return J9_STACKWALK_STOP_ITERATING;
@@ -99,6 +100,7 @@ Java_jdk_internal_misc_ScopedMemoryAccess_closeScope0(JNIEnv *env, jobject insta
 			walkState.frameWalkFunction = closeScope0FrameWalkFunction;
 			walkState.objectSlotWalkFunction = closeScope0OSlotWalkFunction;
 
+			printf("Next thread\n");
 			vm->walkStackFrames(walkThread, &walkState);
 			if (JNI_FALSE == *(jboolean *)walkState.userData2) {
 				/* scope found */
